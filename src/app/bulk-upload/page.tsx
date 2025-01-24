@@ -1,7 +1,6 @@
 'use client'
 import React, { useState } from "react";
 import { useDropzone } from "react-dropzone";
-import Papa from "papaparse";
 
 // Define types for your data
 interface Product {
@@ -29,19 +28,28 @@ const BulkUpload = () => {
     }
   };
 
-  // Parse CSV file
+  // Parse CSV file (you can replace this logic with your custom CSV parsing logic if needed)
   const parseCSV = (file: File) => {
-    Papa.parse(file, {
-      complete: (result) => {
-        console.log("CSV Data:", result);
-        setFileData(result.data); // Save CSV data in the state
-      },
-      header: true,
-      skipEmptyLines: true,
-    });
+    const reader = new FileReader();
+    reader.onload = () => {
+      const text = reader.result as string;
+      const lines = text.split("\n");
+      const header = lines[0].split(",");
+      const data = lines.slice(1).map((line) => {
+        const values = line.split(",");
+        let obj: any = {};
+        header.forEach((key, index) => {
+          obj[key.trim()] = values[index]?.trim();
+        });
+        return obj;
+      });
+      console.log("CSV Data:", data);
+      setFileData(data);
+    };
+    reader.readAsText(file);
   };
 
-  // Parse JSON file (error handling removed)
+  // Parse JSON file
   const parseJSON = (file: File) => {
     const reader = new FileReader();
     reader.onload = () => {
@@ -50,7 +58,6 @@ const BulkUpload = () => {
         console.log("JSON Data:", parsedData);
         setFileData(parsedData); // Save JSON data in the state
       } catch {
-        // Set error message without using 'error' variable
         setErrorMessage("Invalid JSON file format.");
       }
     };
