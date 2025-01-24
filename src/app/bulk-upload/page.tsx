@@ -3,12 +3,15 @@ import React, { useState } from "react";
 import { useDropzone } from "react-dropzone";
 import Papa from "papaparse";
 
+// You can define a type for file data if you know the structure
+type FileData = any;
+
 const BulkUpload = () => {
-  const [fileData, setFileData] = useState(null);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [fileData, setFileData] = useState<FileData | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   // Handle file drop
-  const onDrop = (acceptedFiles) => {
+  const onDrop = (acceptedFiles: File[]) => {  // <-- Typed as File array
     const file = acceptedFiles[0];
     if (file) {
       // Check if it's a valid CSV or JSON file
@@ -24,7 +27,7 @@ const BulkUpload = () => {
   };
 
   // Parse CSV file
-  const parseCSV = (file) => {
+  const parseCSV = (file: File) => {
     Papa.parse(file, {
       complete: (result) => {
         console.log("CSV Data:", result);
@@ -36,11 +39,11 @@ const BulkUpload = () => {
   };
 
   // Parse JSON file
-  const parseJSON = (file) => {
+  const parseJSON = (file: File) => {
     const reader = new FileReader();
     reader.onload = () => {
       try {
-        const parsedData = JSON.parse(reader.result);
+        const parsedData = JSON.parse(reader.result as string);
         console.log("JSON Data:", parsedData);
         setFileData(parsedData); // Save JSON data in the state
       } catch (error) {
