@@ -4,9 +4,7 @@ import { useDropzone } from "react-dropzone";
 
 // Define types for your data
 interface Product {
-  id: number;
-  name: string;
-  price: number;
+  [key: string]: string | number; // This will allow dynamic keys with string or number values
 }
 
 const BulkUpload = () => {
@@ -35,14 +33,17 @@ const BulkUpload = () => {
       const text = reader.result as string;
       const lines = text.split("\n");
       const header = lines[0].split(",");
-      const data = lines.slice(1).map((line) => {
+      
+      // Changed from let to const and specified a type for 'obj'
+      const data: Product[] = lines.slice(1).map((line) => {
         const values = line.split(",");
-        let obj: any = {};
+        const obj: Product = {};  // Specify the type for obj
         header.forEach((key, index) => {
           obj[key.trim()] = values[index]?.trim();
         });
         return obj;
       });
+
       console.log("CSV Data:", data);
       setFileData(data);
     };
