@@ -1,6 +1,6 @@
 'use client'
 import React, { useState } from "react";
-import { useDropzone } from "react-dropzone";
+import { useDropzone, Accept } from "react-dropzone";
 
 // Define types for your data
 interface Product {
@@ -75,10 +75,10 @@ const BulkUpload = () => {
     // Here you would call an API to save the file data
   };
 
-  // Set up the drop zone
+  // Set up the drop zone with correct 'accept' property as an array of strings
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
-    accept: ".csv,.json", 
+    accept: ['.csv', '.json'], // Correct way to define accepted file types
     multiple: false, 
   });
 
