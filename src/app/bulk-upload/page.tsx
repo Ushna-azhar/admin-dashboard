@@ -69,7 +69,7 @@ const BulkUpload = () => {
   // Set up the drop zone
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
-    accept: '.csv, .json', // Accept CSV and JSON files
+    accept: ['.csv', '.json'], // Correct way to define accepted file types
     multiple: false,
   });
 
@@ -102,6 +102,8 @@ const BulkUpload = () => {
 };
 
 export default BulkUpload;
+
+
 
 
 
