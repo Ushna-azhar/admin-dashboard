@@ -3,18 +3,21 @@ import React, { useState } from "react";
 import { useDropzone } from "react-dropzone";
 import Papa from "papaparse";
 
-// You can define a type for file data if you know the structure
-type FileData = any;
+// Define types for your data
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+}
 
 const BulkUpload = () => {
-  const [fileData, setFileData] = useState<FileData | null>(null);
+  const [fileData, setFileData] = useState<Product[] | object[] | null>(null); // Specific type for file data
   const [errorMessage, setErrorMessage] = useState<string>("");
 
   // Handle file drop
-  const onDrop = (acceptedFiles: File[]) => {  // <-- Typed as File array
+  const onDrop = (acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
     if (file) {
-      // Check if it's a valid CSV or JSON file
       const fileExtension = file.name.split(".").pop();
       if (fileExtension === "csv") {
         parseCSV(file);
@@ -33,7 +36,7 @@ const BulkUpload = () => {
         console.log("CSV Data:", result);
         setFileData(result.data); // Save CSV data in the state
       },
-      header: true, // If the first row contains headers
+      header: true,
       skipEmptyLines: true,
     });
   };
@@ -59,17 +62,15 @@ const BulkUpload = () => {
       setErrorMessage("Please upload a valid file.");
       return;
     }
-    // Send file data to the backend or handle as needed
     console.log("Uploading data:", fileData);
-    // Here you would call an API to save the file data, e.g.:
-    // axios.post('/api/upload', { data: fileData })
+    // Here you would call an API to save the file data
   };
 
   // Set up the drop zone
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
-    accept: ".csv,.json", // Only accept CSV and JSON files
-    multiple: false, // Accept only one file at a time
+    accept: ".csv,.json", 
+    multiple: false, 
   });
 
   return (
