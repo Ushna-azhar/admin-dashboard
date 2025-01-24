@@ -53,7 +53,7 @@ const BulkUpload = () => {
   // Set up the drop zone
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
-    accept: '.csv', // Accept only CSV files
+    accept: ['.csv'], // Accept only CSV files as an array
     multiple: false,
   });
 
@@ -86,6 +86,7 @@ const BulkUpload = () => {
 };
 
 export default BulkUpload;
+
 
 
 
