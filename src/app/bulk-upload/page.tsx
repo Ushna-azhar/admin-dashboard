@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useDropzone } from "react-dropzone";
 
 const BulkUpload = () => {
-  const [fileData, setFileData] = useState(null);
+  const [fileData, setFileData] = useState<Record<string, string>[]>([]); // Specify type here
   const [errorMessage, setErrorMessage] = useState("");
 
   // Handle file drop
@@ -29,9 +29,9 @@ const BulkUpload = () => {
       const lines = text.split("\n");
       const header = lines[0].split(",");
       
-      const data = lines.slice(1).map((line) => {
+      const data: Record<string, string>[] = lines.slice(1).map((line) => {
         const values = line.split(",");
-        const obj: any = {};  // Use 'any' for simplicity
+        const obj: Record<string, string> = {}; // Avoid 'any' by using Record<string, string>
         header.forEach((key, index) => {
           obj[key.trim()] = values[index]?.trim();
         });
@@ -59,7 +59,7 @@ const BulkUpload = () => {
 
   // Handle file submission
   const handleUpload = () => {
-    if (!fileData) {
+    if (!fileData.length) {
       setErrorMessage("Please upload a valid file.");
       return;
     }
@@ -85,7 +85,7 @@ const BulkUpload = () => {
 
       {errorMessage && <div className="mt-4 text-red-500 text-center">{errorMessage}</div>}
 
-      {fileData && (
+      {fileData.length > 0 && (
         <div className="mt-8">
           <h3 className="text-xl font-semibold text-gray-800 mb-4">File Preview</h3>
           <pre className="bg-white p-4 rounded-lg shadow-lg">{JSON.stringify(fileData, null, 2)}</pre>
@@ -102,5 +102,6 @@ const BulkUpload = () => {
 };
 
 export default BulkUpload;
+
 
 
