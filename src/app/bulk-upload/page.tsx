@@ -1,6 +1,6 @@
 'use client'
 import React, { useState } from "react";
-import { useDropzone, Accept } from "react-dropzone";
+import { useDropzone } from "react-dropzone";
 
 // Define types for your data
 interface Product {
