@@ -13,10 +13,8 @@ const BulkUpload = () => {
       const fileExtension = file.name.split(".").pop();
       if (fileExtension === "csv") {
         parseCSV(file);
-      } else if (fileExtension === "json") {
-        parseJSON(file);
       } else {
-        setErrorMessage("Invalid file type. Please upload a CSV or JSON file.");
+        setErrorMessage("Invalid file type. Please upload a CSV file.");
       }
     }
   };
@@ -43,20 +41,6 @@ const BulkUpload = () => {
     reader.readAsText(file);
   };
 
-  // Parse JSON file
-  const parseJSON = (file: File) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      try {
-        const parsedData = JSON.parse(reader.result as string);
-        setFileData(parsedData); // Save JSON data in the state
-      } catch {
-        setErrorMessage("Invalid JSON file format.");
-      }
-    };
-    reader.readAsText(file);
-  };
-
   // Handle file submission
   const handleUpload = () => {
     if (!fileData.length) {
@@ -69,18 +53,18 @@ const BulkUpload = () => {
   // Set up the drop zone
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
-    accept: ['.csv', '.json'], // Correct way to define accepted file types
+    accept: '.csv', // Accept only CSV files
     multiple: false,
   });
 
   return (
     <div className="p-8 bg-gray-50 min-h-screen">
       <h2 className="text-3xl font-semibold text-center text-gray-800 mb-6">Bulk Upload</h2>
-      <p className="text-center text-gray-600 mb-8">Upload product data in bulk using CSV or JSON files.</p>
+      <p className="text-center text-gray-600 mb-8">Upload product data in bulk using CSV files.</p>
 
       <div {...getRootProps()} className="bg-white border-dashed border-4 border-gray-300 p-8 text-center rounded-lg">
         <input {...getInputProps()} />
-        <p className="text-lg text-gray-700">Drag & Drop CSV or JSON file here or click to select</p>
+        <p className="text-lg text-gray-700">Drag & Drop CSV file here or click to select</p>
       </div>
 
       {errorMessage && <div className="mt-4 text-red-500 text-center">{errorMessage}</div>}
@@ -102,6 +86,7 @@ const BulkUpload = () => {
 };
 
 export default BulkUpload;
+
 
 
 
