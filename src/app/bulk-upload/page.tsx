@@ -26,7 +26,7 @@ const BulkUpload = () => {
     }
   };
 
-  // Parse CSV file (you can replace this logic with your custom CSV parsing logic if needed)
+  // Parse CSV file
   const parseCSV = (file: File) => {
     const reader = new FileReader();
     reader.onload = () => {
@@ -75,10 +75,10 @@ const BulkUpload = () => {
     // Here you would call an API to save the file data
   };
 
-  // Set up the drop zone with correct 'accept' property as an array of strings
+  // Set up the drop zone with correct 'accept' property as readonly array of strings
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
-    accept: ['.csv', '.json'], // Correct way to define accepted file types
+    accept: ['.csv', '.json'] as const, // This makes it a readonly array
     multiple: false, 
   });
 
@@ -131,3 +131,4 @@ const BulkUpload = () => {
 };
 
 export default BulkUpload;
+
