@@ -41,7 +41,7 @@ const BulkUpload = () => {
     });
   };
 
-  // Parse JSON file
+  // Parse JSON file (error handling removed)
   const parseJSON = (file: File) => {
     const reader = new FileReader();
     reader.onload = () => {
@@ -49,7 +49,8 @@ const BulkUpload = () => {
         const parsedData = JSON.parse(reader.result as string);
         console.log("JSON Data:", parsedData);
         setFileData(parsedData); // Save JSON data in the state
-      } catch (error) {
+      } catch {
+        // Set error message without using 'error' variable
         setErrorMessage("Invalid JSON file format.");
       }
     };
